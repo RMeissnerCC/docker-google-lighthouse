@@ -8,15 +8,15 @@ app = FastAPI(title="Lighthouse Extractor", version="0.1")
 API_PORT = 5058
 
 
-@app.get("/lighthouse")
-def lighthouse():
-    url = "www.google.com"
+@app.get("/accessibility")
+def accessibility():
+    url = "https://www.google.com"
     strategy = "mobile"
     cmd = [
-        "docker",
-        "run",
-        "femtopixel/google-lighthouse",
-        f"{url}",
+        f"lighthouse",
+        url,
+        "--enable-error-reporting",
+        "--chrome-flags='--headless --no-sandbox --disable-gpu'",
         f"--emulated-form-factor={strategy}",
         "--output=json",
         "--quiet",
