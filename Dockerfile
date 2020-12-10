@@ -21,7 +21,7 @@ RUN apt-get update || : && \
     apt-get install python3 -y && \
     apt-get install g++ python3-dev libxml2 libxml2-dev libffi-dev libssl-dev libxslt-dev -y && \
     apt-get install python3-pip -y
-# openssl-dev
+# RUN apt-get install openssl-dev -y
 
 COPY requirements.txt requirements.txt
 RUN pip3 install --no-cache-dir -r requirements.txt

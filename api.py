@@ -1,3 +1,4 @@
+import json
 import subprocess
 
 import uvicorn as uvicorn
@@ -5,13 +6,14 @@ from fastapi import FastAPI
 
 app = FastAPI(title="Lighthouse Extractor", version="0.1")
 
-API_PORT = 5058
+API_PORT = 5080
 
 
 @app.get("/accessibility")
 def accessibility():
     url = "https://www.google.com"
     strategy = "mobile"
+    category = "accessibility"
     cmd = [
         f"lighthouse",
         url,
@@ -32,9 +34,18 @@ def accessibility():
 
     for line in iter(p.stdout.readline, b""):
         output.append(line.decode())
-    output = "".join(output)
+    output = json.loads("".join(output))
 
-    return {"status": "ok", "output": output}
+    try:
+        if "runtimeError" in output.keys():
+            score = [-1]
+        else:
+            score =                 output["categories"][category]["score"]
+    except KeyError:
+        print(output)
+        score = [-1]
+
+    return score
 
 
 @app.get("/_ping")
